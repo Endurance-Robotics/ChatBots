@@ -1,4 +1,5 @@
-# ChatBots [🇷🇺](README.ru_RU.md)
+ [🇷🇺](README.md)
+# ChatBots
 
 Chatter bots, virtual assistants - a collection of internals for bots of different platforms.
 
