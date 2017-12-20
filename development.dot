@@ -1,0 +1,64 @@
+digraph chatbots {
+
+// Configuration
+
+graph [
+center = true,
+charset = "UTF-8",
+label = "Диаграмма процесса разработки",
+labelloc = "t",
+labeljust = "c",
+layout = circo,
+root = development,
+mindist = 13,
+overlap = false,
+fontsize = 14,
+splines = true
+];
+
+node [
+fontsize = 12,
+style = filled,
+];
+
+edge [
+style = solid
+];
+
+// Nodes
+
+analysis [
+label="Анализ\nтребований,\nпроработка\nсоглашений",
+fillcolor = Lavender
+];
+planning [
+label="Проектирование,\nвыбор методов\nреализации",
+fillcolor = Khaki
+];
+development [
+label="Реализация\n(кодирование,\nформирование\nбазы знаний)",
+fillcolor = YellowGreen
+];
+testing [
+label="Тестирование",
+fillcolor = DarkSalmon
+];
+deployment [
+label="Внедрение\n(развёртывание и\nинтеграция)",
+fillcolor = CadetBlue
+];
+maintenance [
+label="Сопровождение\n(техническая\nподдержка)",
+fillcolor = Plum
+];
+
+// Edges
+
+analysis -> planning;
+planning -> development;
+development -> testing;
+testing -> development;
+development -> deployment;
+deployment -> maintenance;
+maintenance -> analysis;
+}
