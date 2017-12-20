@@ -1,7 +1,7 @@
-# ChatBots [🇷🇺](README.ru_RU.md)
+## ChatBots [🇺🇸](README.md)
 
-Chatter bots, virtual assistants - a collection of internals for bots of different platforms.
+Чат-боты, виртуальные помощники - коллекция содержимого чат-ботов различных платформ.
 
 ## [Bot Libre!](botlibre/)
 
-This is the first reviewed chatbot platform.
+Это первая из рассмотренных платформ для создания чат-ботов.
