@@ -1,5 +1,7 @@
 graph chatbots {
+
 // Configuration
+
 graph [
 center = true,
 charset = "UTF-8",
@@ -7,8 +9,8 @@ label = "",
 labelloc = "t",
 labeljust = "c",
 fontsize = 14,
-//rankdir = LR,
-splines = spline
+layout = fdp,
+splines = true
 ];
 
 node [
@@ -23,16 +25,17 @@ style = solid
 
 // Nodes
 
-"Чат-боты" [fillcolor = LightSlateGray];
+"Чат-боты" [fillcolor = YellowGreen];
 "Основные понятия" [fillcolor = Khaki];
 "Виды" [fillcolor = Khaki];
 "Функции" [fillcolor = Khaki];
 "Разработка" [fillcolor = Khaki];
 "Реализация" [fillcolor = Khaki];
-"Внедрение" [fillcolor = Beige];
+"Внедрение" [fillcolor = Plum];
 "Преимущества\nи недостатки" [fillcolor = Khaki];
 "Область\nприменения" [fillcolor = Khaki];
-"Интеграция" [fillcolor = Beige];
+"Интеграция" [fillcolor = Plum];
+"Платформы" [fillcolor = Plum];
 
 // Edges
 
