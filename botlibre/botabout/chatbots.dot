@@ -27,7 +27,7 @@ style = solid
 // Nodes
 
 all [label = "..." fillcolor = YellowGreen];
-chatbots [label = "Чат-боты" fillcolor = Plum];
+chatbots [label = "Чат-боты\n(примеры)" fillcolor = Plum];
 
 basics [label = "Основные\nпонятия" fillcolor = Khaki];
 types [label = "Виды" fillcolor = Khaki];
@@ -70,6 +70,7 @@ languages [label = "Языки\nпрограммирования"];
 all -- basics;
 all -- types;
 all -- functions;
+all -- chatbots;
 all -- development;
 all -- integration;
 all -- benefits;
@@ -77,15 +78,24 @@ all -- applications;
 
 basics -- AI;
 basics -- NLP;
-basics -- chatbots;
 basics -- knowledge_base;
 basics -- principles;
 
-chatbots -- chatbot;
-chatbots -- ibot;
-chatbots -- VDA;
-//chatbots -- types;
-//chatbots -- functions;
+basics -- chatbot;
+basics -- ibot;
+basics -- VDA;
+basics -- "Тест Тьюринга";
+basics -- "Чат";
+
+chatbots -- "Meduza";
+chatbots -- "Fb SAM";
+chatbots -- "Shazam";
+chatbots -- "HR-бот";
+chatbots -- "ШтрафыБот";
+chatbots -- "Вера";
+chatbots -- "Киоск\nRuBot";
+chatbots -- "LSSender";
+chatbots -- "MS Tay";
 
 types -- chatbot;
 types -- ibot;
