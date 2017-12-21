@@ -8,15 +8,16 @@ charset = "UTF-8",
 label = "",
 labelloc = "t",
 labeljust = "c",
-fontsize = 14,
+fontsize = 13,
+style = invis,
 layout = fdp,
 splines = true
 ];
 
 node [
-fontsize = 12,
+fontsize = 11,
 style = filled,
-fillcolor = LightSteelBlue
+fillcolor = AliceBlue
 ];
 
 edge [
@@ -25,60 +26,129 @@ style = solid
 
 // Nodes
 
-"Чат-боты" [fillcolor = YellowGreen];
-"Основные понятия" [fillcolor = Khaki];
-"Виды" [fillcolor = Khaki];
-"Функции" [fillcolor = Khaki];
-"Разработка" [fillcolor = Khaki];
-"Реализация" [fillcolor = Khaki];
-"Внедрение" [fillcolor = Plum];
-"Преимущества\nи недостатки" [fillcolor = Khaki];
-"Область\nприменения" [fillcolor = Khaki];
-"Интеграция" [fillcolor = Plum];
-"Платформы" [fillcolor = Plum];
+all [label = "..." fillcolor = YellowGreen];
+chatbots [label = "Чат-боты" fillcolor = Plum];
+
+basics [label = "Основные\nпонятия" fillcolor = Khaki];
+types [label = "Виды" fillcolor = Khaki];
+functions [label = "Функции" fillcolor = Khaki];
+development [label = "Разработка" fillcolor = Khaki];
+benefits [label = "Преимущества\nи недостатки" fillcolor = Khaki];
+applications [label = "Область\nприменения" fillcolor = Khaki];
+
+talk [label = "Беседа"];
+automation [label = "Автоматизация"];
+control [label = "Управление"];
+research [label = "Исследования"];
+
+ibot [label = "Бот" fillcolor = Wheat];
+chatbot [label = "Виртуальный\nсобеседник" fillcolor = Wheat];
+VDA [label = "Виртуальный\nцифровой\nпомощник" fillcolor = Wheat];
+
+knowledge_base [label = "База\nзнаний"];
+AI [label = "Искусственный\nинтеллект"];
+NLP [label = "Обработка\nестественных\nязыков"];
+principles [label = "Устройство\nчат-бота"];
+
+issues [label = "Проблемы\nразработки" fillcolor = Plum];
+integration [label = "Интеграция" fillcolor = Plum];
+platforms [label = "Платформы" fillcolor = Plum];
+
+analysis [label = "Анализ" fillcolor = LightSteelBlue];
+planning [label = "Проектирование" fillcolor = LightSteelBlue];
+implementation [label = "Реализация" fillcolor = LightSteelBlue];
+testing [label = "Тестирование" fillcolor = LightSteelBlue];
+deployment [label = "Внедрение" fillcolor = LightSteelBlue];
+maintenance [label = "Сопровождение" fillcolor = LightSteelBlue];
+
+coding [label = "Программирование"];
+training [label = "Обучение"];
+languages [label = "Языки\nпрограммирования"];
 
 // Edges
 
-"Чат-боты" -- "Основные понятия";
-"Чат-боты" -- "Виды";
-"Чат-боты" -- "Функции";
-"Чат-боты" -- "Разработка";
-"Чат-боты" -- "Преимущества\nи недостатки";
-"Чат-боты" -- "Область\nприменения";
-"Чат-боты" -- "Интеграция";
-"Чат-боты" -- "Реализация";
+all -- basics;
+all -- types;
+all -- functions;
+all -- development;
+all -- integration;
+all -- benefits;
+all -- applications;
 
-"Основные понятия" -- "Определение";
-"Основные понятия" -- "База знаний";
-"Основные понятия" -- "Устройство\nчат-бота";
+basics -- AI;
+basics -- NLP;
+basics -- chatbots;
+basics -- knowledge_base;
+basics -- principles;
 
-"Разработка" -- "База знаний";
-"Разработка" -- "Интеграция";
-"Разработка" -- "Проектирование";
-"Разработка" -- "Обучение";
-"Разработка" -- "Проблемы\nразработки";
-"Разработка" -- "Платформы";
+chatbots -- chatbot;
+chatbots -- ibot;
+chatbots -- VDA;
+//chatbots -- types;
+//chatbots -- functions;
 
-"Реализация" -- "Платформы";
-"Реализация" -- "Внедрение";
+types -- chatbot;
+types -- ibot;
+types -- VDA;
 
-"Внедрение" -- "Интеграция";
-"Внедрение" -- "Платформы";
+functions -- talk;
+functions -- automation;
+functions -- control;
+functions -- research;
 
-"Платформы" -- "Bot Libre!";
-"Платформы" -- "Pandorabots";
-"Платформы" -- "Dialogflow";
+talk -- chatbot;
+automation -- ibot;
+automation -- VDA;
+control -- VDA;
+research -- chatbot;
+chatbot -- principles;
 
-"Интеграция" -- "Мессенджеры";
-"Интеграция" -- "Электронная\nпочта";
-"Интеграция" -- "SMS";
-"Интеграция" -- "Web-сайт";
-"Интеграция" -- "Wolfram Alpha";
-"Интеграция" -- "IRC-каналы"
+research -- AI;
+AI -- chatbot;
+NLP -- VDA;
 
-"Область\nприменения" -- "Внедрение";
-"Область\nприменения" -- "Службы\nтехподдержки";
-"Область\nприменения" -- "Service Desk";
-"Область\nприменения" -- "Поиск\nинформации";
-"Область\nприменения" -- "Автоматизация\nи голосовое\nуправление";
+development -- analysis;
+development -- planning;
+development -- implementation;
+development -- testing;
+development -- deployment;
+development -- maintenance;
+development -- issues;
+
+maintenance -- analysis;
+analysis -- planning;
+planning -- implementation;
+implementation -- testing;
+implementation -- deployment;
+deployment -- maintenance;
+
+implementation -- coding;
+implementation -- platforms;
+implementation -- training;
+
+training -- knowledge_base;
+coding -- knowledge_base;
+
+coding -- languages;
+platforms -- languages;
+
+deployment -- integration;
+deployment -- platforms;
+
+platforms -- "Bot Libre!";
+platforms -- "Pandorabots";
+platforms -- "Dialogflow";
+
+integration -- "Мессенджеры";
+integration -- "Электронная\nпочта";
+integration -- "SMS";
+integration -- "Web-сайт";
+integration -- "Wolfram Alpha";
+integration -- "IRC-каналы"
+
+//applications -- deployment;
+applications -- "Службы\nтехподдержки";
+applications -- "Service Desk";
+applications -- "Поиск\nинформации";
+applications -- "Автоматизация\nи голосовое\nуправление";
 }
