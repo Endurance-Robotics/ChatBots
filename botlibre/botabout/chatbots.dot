@@ -64,6 +64,7 @@ maintenance [label = "Сопровождение" fillcolor = LightSteelBlue];
 coding [label = "Программирование"];
 training [label = "Обучение"];
 languages [label = "Языки\nпрограммирования"];
+turing [label = "Тест\nТьюринга"];
 
 // Edges
 
@@ -76,61 +77,79 @@ all -- integration;
 all -- benefits;
 all -- applications;
 
-basics -- AI;
-basics -- NLP;
+subgraph cluster_basics {
+    basics -- AI;
+    basics -- NLP;
+    basics -- principles;
+
+    //basics -- chatbot;
+    //basics -- ibot;
+    //basics -- VDA;
+    basics -- turing;
+    basics -- "Чат";
+};
 basics -- knowledge_base;
-basics -- principles;
 
-basics -- chatbot;
-basics -- ibot;
-basics -- VDA;
-basics -- "Тест Тьюринга";
-basics -- "Чат";
+principles -- "Чат";
+AI -- turing;
+research -- turing;
+//AI -- chatbot;
 
-chatbots -- "Meduza";
-chatbots -- "Fb SAM";
-chatbots -- "Shazam";
-chatbots -- "HR-бот";
-chatbots -- "ШтрафыБот";
-chatbots -- "Вера";
-chatbots -- "Киоск\nRuBot";
-chatbots -- "LSSender";
-chatbots -- "MS Tay";
+subgraph cluster_examples {
+    chatbots -- "Meduza";
+    chatbots -- "Fb SAM";
+    chatbots -- "Shazam";
+    chatbots -- "HR-бот";
+    chatbots -- "ШтрафыБот";
+    chatbots -- "Вера";
+    chatbots -- "Киоск\nRuBot";
+    chatbots -- "LSSender";
+    chatbots -- "MS Tay";
+};
 
-types -- chatbot;
-types -- ibot;
-types -- VDA;
+subgraph cluster_types {
+    types -- chatbot;
+    types -- ibot;
+    types -- VDA;
+    //types -- functions;
+};
 
-functions -- talk;
-functions -- automation;
-functions -- control;
-functions -- research;
+subgraph cluster_functions {
+    functions -- talk;
+    functions -- automation;
+    functions -- control;
+    functions -- research;
+};
 
 talk -- chatbot;
 automation -- ibot;
 automation -- VDA;
 control -- VDA;
 research -- chatbot;
-chatbot -- principles;
 
-research -- AI;
-AI -- chatbot;
-NLP -- VDA;
+types -- principles;
+
+NLP -- control;
+NLP -- talk;
 
 development -- analysis;
-development -- planning;
-development -- implementation;
-development -- testing;
-development -- deployment;
-development -- maintenance;
+//development -- planning;
+//development -- implementation;
+//development -- testing;
+//development -- deployment;
+//development -- maintenance;
 development -- issues;
 
-maintenance -- analysis;
-analysis -- planning;
-planning -- implementation;
-implementation -- testing;
-implementation -- deployment;
-deployment -- maintenance;
+// Development cycle
+subgraph cluster_development {
+    //all -- development;
+    maintenance -- analysis;
+    analysis -- planning;
+    planning -- implementation;
+    implementation -- testing;
+    implementation -- deployment;
+    deployment -- maintenance;
+};
 
 implementation -- coding;
 implementation -- platforms;
@@ -142,23 +161,37 @@ coding -- knowledge_base;
 coding -- languages;
 platforms -- languages;
 
+subgraph cluster_languages {
+    languages -- "AIML";
+    languages -- "Self";
+};
+
 deployment -- integration;
-deployment -- platforms;
+//deployment -- platforms;
 
-platforms -- "Bot Libre!";
-platforms -- "Pandorabots";
-platforms -- "Dialogflow";
+subgraph cluster_platforms {
+    platforms -- "Bot Libre!";
+    platforms -- "Pandorabots";
+    platforms -- "Dialogflow";
+};
 
-integration -- "Мессенджеры";
-integration -- "Электронная\nпочта";
-integration -- "SMS";
-integration -- "Web-сайт";
-integration -- "Wolfram Alpha";
-integration -- "IRC-каналы"
+subgraph cluster_integration {
+    integration -- "Мессенджеры";
+    integration -- "E-mail";
+    integration -- "SMS";
+    integration -- "Web-сайт";
+    integration -- "Wolfram Alpha";
+    integration -- "IRC-каналы";
+    "E-mail" -- "Парсер";
+};
 
-//applications -- deployment;
-applications -- "Службы\nтехподдержки";
-applications -- "Service Desk";
-applications -- "Поиск\nинформации";
-applications -- "Автоматизация\nи голосовое\nуправление";
+subgraph cluster_applications {
+    //applications -- deployment;
+    applications -- "Развлечения";
+    applications -- "Service Desk";
+    applications -- "Поиск\nинформации";
+    applications -- "Автоматизация\nи голосовое\nуправление";
+};
 }
+
+// vim: si et ts=4 sw=4:
