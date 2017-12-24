@@ -1,4 +1,4 @@
-graph chatbots {
+graph examples {
 
 // Configuration
 
@@ -27,7 +27,7 @@ style = solid
 // Nodes
 
 all [label = "..." fillcolor = YellowGreen];
-chatbots [label = "Чат-боты\n(примеры)" fillcolor = Plum];
+examples [label = "Чат-боты\n(примеры)" fillcolor = Plum];
 
 basics [label = "Основные\nпонятия" fillcolor = Khaki];
 types [label = "Виды" fillcolor = Khaki];
@@ -35,6 +35,7 @@ functions [label = "Функции" fillcolor = Khaki];
 development [label = "Разработка" fillcolor = Khaki];
 benefits [label = "Преимущества\nи недостатки" fillcolor = Khaki];
 applications [label = "Область\nприменения" fillcolor = Khaki];
+endurance [label = "Endurance" fillcolor = Khaki];
 
 talk [label = "Беседа"];
 automation [label = "Автоматизация"];
@@ -54,6 +55,9 @@ issues [label = "Проблемы\nразработки" fillcolor = Plum];
 integration [label = "Интеграция" fillcolor = Plum];
 platforms [label = "Платформы" fillcolor = Plum];
 
+pros [label = "Плюсы" fillcolor = Plum];
+cons [label = "Минусы" fillcolor = Plum];
+
 analysis [label = "Анализ" fillcolor = LightSteelBlue];
 planning [label = "Проектирование" fillcolor = LightSteelBlue];
 implementation [label = "Реализация" fillcolor = LightSteelBlue];
@@ -71,11 +75,22 @@ turing [label = "Тест\nТьюринга"];
 all -- basics;
 all -- types;
 all -- functions;
-all -- chatbots;
+all -- examples;
 all -- development;
 all -- integration;
 all -- benefits;
 all -- applications;
+all -- endurance;
+
+subgraph cluster_benefits {
+    benefits -- pros;
+    benefits -- cons;
+
+    pros -- "Объём\nзапросов";
+    pros -- "Доступность";
+    cons -- "Недоверие";
+    cons -- "Незнание";
+};
 
 subgraph cluster_basics {
     basics -- AI;
@@ -96,15 +111,15 @@ research -- turing;
 //AI -- chatbot;
 
 subgraph cluster_examples {
-    chatbots -- "Meduza";
-    chatbots -- "Fb SAM";
-    chatbots -- "Shazam";
-    chatbots -- "HR-бот";
-    chatbots -- "ШтрафыБот";
-    chatbots -- "Вера";
-    chatbots -- "Киоск\nRuBot";
-    chatbots -- "LSSender";
-    chatbots -- "MS Tay";
+    examples -- "Meduza";
+    examples -- "Fb SAM";
+    examples -- "Shazam";
+    examples -- "HR-бот";
+    examples -- "ШтрафыБот";
+    examples -- "Вера";
+    examples -- "Киоск\nRuBot";
+    examples -- "LSSender";
+    examples -- "MS Tay";
 };
 
 subgraph cluster_types {
@@ -139,6 +154,10 @@ development -- analysis;
 //development -- deployment;
 //development -- maintenance;
 development -- issues;
+//issues -- NLP;
+issues -- "Предметная\nобласть";
+issues -- "Естественные\nязыки";
+"Естественные\nязыки" -- NLP;
 
 // Development cycle
 subgraph cluster_development {
@@ -191,6 +210,11 @@ subgraph cluster_applications {
     applications -- "Service Desk";
     applications -- "Поиск\nинформации";
     applications -- "Автоматизация\nи голосовое\nуправление";
+};
+
+subgraph cluster_endurance {
+    endurance -- "Чат-боты";
+    endurance -- "Контакты";
 };
 }
 
