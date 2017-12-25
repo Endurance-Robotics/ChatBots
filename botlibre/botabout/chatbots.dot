@@ -88,8 +88,11 @@ subgraph cluster_benefits {
 
     pros -- "Объём\nзапросов";
     pros -- "Доступность";
+    pros -- "Экономия";
+
     cons -- "Недоверие";
     cons -- "Незнание";
+    cons -- "Этика";
 };
 
 subgraph cluster_basics {
