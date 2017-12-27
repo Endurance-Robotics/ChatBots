@@ -1,4 +1,4 @@
-graph examples {
+graph semantics {
 
 // Configuration
 
@@ -102,7 +102,7 @@ subgraph cluster_basics {
 
     //basics -- chatbot;
     //basics -- ibot;
-    //basics -- VDA;
+    basics -- "Вопросно-ответная\nсистема";
     basics -- turing;
     basics -- "Чат";
 };
@@ -217,6 +217,8 @@ subgraph cluster_applications {
 
 subgraph cluster_endurance {
     endurance -- "Чат-боты";
+    endurance -- "Деятельность";
+    endurance -- "Достижения";
     endurance -- "Контакты";
 };
 }
