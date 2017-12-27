@@ -3,6 +3,8 @@
 
 Chatter bots, virtual assistants - a collection of internals for bots of different platforms.
 
-## [Bot Libre!](botlibre/)
+## [Botabout](botabout/)
 
-This is the first reviewed chatbot platform.
+The first experimental chatbot.
+
+## Chatbot development
