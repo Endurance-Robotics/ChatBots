@@ -1,6 +1,6 @@
 # Botabout makefile
 
-topic_graph = chatbots
+topic_graph = graph
 
 all: run
 
