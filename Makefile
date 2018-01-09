@@ -1,4 +1,4 @@
-# Botabout makefile
+# Chatbots makefile
 
 topic_graph = development
 
