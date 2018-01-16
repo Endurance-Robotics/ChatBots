@@ -37,6 +37,8 @@ benefits [label = "Преимущества\nи недостатки" fillcolor 
 applications [label = "Область\nприменения" fillcolor = Khaki];
 endurance [label = "Endurance" fillcolor = Khaki];
 
+projects [label = "Проекты" fillcolor = Plum];
+
 talk [label = "Беседа"];
 automation [label = "Автоматизация"];
 control [label = "Управление"];
@@ -216,10 +218,21 @@ subgraph cluster_applications {
 };
 
 subgraph cluster_endurance {
-    endurance -- "Чат-боты";
-    endurance -- "Деятельность";
-    endurance -- "Достижения";
+    endurance -- "Лидер";
+    endurance -- projects;
+    endurance -- "Заказы";
     endurance -- "Контакты";
+    "Контакты" -- "Заказы";
+    subgraph cluster_endurance_projects {
+        projects -- "Роботы";
+        projects -- "Лазеры";
+        projects -- "Чат-боты";
+        subgraph cluster_endurance_chatbots {
+            "Чат-боты" -- "Чат-бот\nBlockchain";
+            "Чат-боты" -- "Чат-бот о\nлазерах";
+            "Чат-боты" -- "Чат-бот о\nчат-ботах";
+        }
+    }
 };
 }
 
