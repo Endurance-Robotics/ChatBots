@@ -1,0 +1,108 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+# Theme parser program for BotLibre response lists
+#
+
+import re
+from sys import argv
+from sys import exit
+from os.path import basename
+from math import log10, floor
+
+# Variables
+
+question_key = "question"
+response_key = "response"
+xtension =re.compile(r"\.res$")
+xhtml_tag = re.compile(r"<[^>]+>")
+
+# Functions
+
+def show_help():
+  self_name = basename(argv[0])
+  print("Synopsis:")
+  print("\t", self_name, "show <file>")
+  print("\t", self_name, "show [field] <file>")
+
+def parse_responses(list_file):
+  # Regex pattern for BotLibre response lists (simplified)
+  xdivide = re.compile(r"^$")
+  xmeta_key = re.compile(r"^[a-z ]+: ")
+  xmeta_value = re.compile(r": .+$")
+  # Responses are a list of disctionaries
+  responses = []
+  the_response = {}
+  # Read response list line-by-line
+  for line in list_file:#open(argv[1], "r", 1):
+    if xdivide.match(line):
+      responses.append(the_response)
+      the_response = {}
+    if not the_response.get(question_key):
+      the_response[question_key] = line.strip()
+    elif not xmeta_key.search(line):
+      if the_response.get(response_key):
+        the_response[response_key] += line.strip()
+      else:
+        the_response[response_key] = line.strip()
+    else:
+      the_response[xmeta_value.sub('', line).strip()] =\
+          xmeta_key.sub('', line.strip())
+  return responses
+
+def show_responses(responses = None, field = question_key):
+  # Check responses
+  if responses:
+    counter = 0
+    pad = floor(log10(len(responses))) + 1
+    for the_response in responses:
+      counter += 1
+      print(str(counter).zfill(pad), the_response.get(field))
+    # Display total
+    print("Total number of entries: ", counter)
+
+def dump_responses(responses, path = "."):
+  return None
+# Main
+
+if len(argv) < 2:
+  show_help()
+  exit()
+elif argv[1] == "show":
+  # show <file>
+  try:
+    with open(argv[2], "r", 1) as list_file:
+      responses = parse_responses(list_file)
+      show_responses(responses)
+  except IOError:
+    pass
+  else:
+    list_file.close
+    exit()
+  # show [field] <file>
+  try:
+    with open(argv[3], "r", 1) as list_file:
+      responses = parse_responses(list_file)
+      show_responses(responses, argv[2])
+  except IOError:
+    show_help()
+    exit()
+  else:
+    list_file.close
+    exit()
+elif argv[1] == "dump":
+  # dump <file>
+  try:
+    with open(argv[3], "r", 1) as list_file:
+      responses = parse_responses(list_file)
+      #show_responses(responses, argv[2])
+  except IOError:
+    show_help()
+    exit()
+  else:
+    list_file.close
+    exit()
+else:
+  show_help()
+  exit()
+
+# vim: se et ts=2 sw=2 number syntax=python:
