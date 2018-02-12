@@ -8,6 +8,7 @@ from sys import argv, exit
 from os import makedirs
 from os.path import basename, join
 from math import log10, floor
+from string import punctuation
 
 # Variables
 
@@ -15,6 +16,8 @@ question_key = "question"
 response_key = "response"
 xtension =re.compile(r"\.res$")
 xhtml_tag = re.compile(r"<[^>]+>")
+xpuncts = re.compile(r"[^\w\s]")
+xspaces = re.compile(r"\s+")
 
 # Functions
 
@@ -81,7 +84,8 @@ def dump_responses(responses, path = "./dump_responses"):
       file_name += " - " + the_response[question_key]
       try:
         with open(join(path, file_name), "w+") as response_file:
-          response_file.write(strip_tags(the_response[response_key]))
+          #response_file.write(strip_tags(the_response[response_key]))
+          response_file.write(normalize(the_response[response_key]))
           response_file.close()
       except IOError:
         print("Error writing to:", file_name)
@@ -90,6 +94,10 @@ def dump_responses(responses, path = "./dump_responses"):
 def strip_tags(text = ""):
   if text:
     return xhtml_tag.sub('', text) # strip_tags
+
+def normalize(text = ""):
+  if text:
+    return xspaces.sub(' ', (xpuncts.sub('', strip_tags(text)))).lower()
 
 # Main
 if len(argv) < 2:
