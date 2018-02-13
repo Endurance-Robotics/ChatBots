@@ -3,21 +3,24 @@
 # Theme parser program for BotLibre response lists
 #
 
+# External routines
+
 import re, errno
 from sys import argv, exit
 from os import makedirs
 from os.path import basename, join
 from math import log10, floor
-from string import punctuation
 
 # Variables
 
+# Response dictionary key names (not defined by response-lists)
 question_key = "question"
 response_key = "response"
-xtension =re.compile(r"\.res$")
-xhtml_tag = re.compile(r"<[^>]+>")
+# Regex patterns for response-lists processing
+xt_html = re.compile(r"<[^>]+>")
 xpuncts = re.compile(r"[^\w\s]")
 xspaces = re.compile(r"\s+")
+xextens = re.compile(r"\.res$|\.$|$")
 
 # Functions
 
@@ -27,19 +30,19 @@ def show_help():
   print("Synopsis:")
   print("\t", self_name, "show <file>")
   print("\t", self_name, "show [field] <file>")
-  return None # show_help
+  return None
+# Function: show_help
 
 # Function: parse_responses
 def parse_responses(list_file):
-  # Regex pattern for BotLibre response lists (simplified)
+  # Regex patterns for BotLibre response lists (simplified)
   xdivide = re.compile(r"^$")
   xmeta_key = re.compile(r"^[a-z ]+: ")
   xmeta_value = re.compile(r": .+$")
   # Responses are a list of disctionaries
   responses = []
   the_response = {}
-  # Read response list line-by-line
-  for line in list_file:#open(argv[1], "r", 1):
+  for line in list_file:
     if xdivide.match(line):
       responses.append(the_response)
       the_response = {}
@@ -53,10 +56,11 @@ def parse_responses(list_file):
     else:
       the_response[xmeta_value.sub('', line).strip()] =\
           xmeta_key.sub('', line.strip())
-  return responses # parse_responses
+  return responses
+# Function: parse_responses
 
 # Function: show_responses
-def show_responses(responses = None, field = question_key):
+def show_responses(responses=None, field=question_key):
   # Check responses
   if responses:
     counter = 0
@@ -65,11 +69,12 @@ def show_responses(responses = None, field = question_key):
       counter += 1
       print(str(counter).zfill(pad), the_response.get(field))
     # Display total
-    print("Total number of entries: ", counter)
-  return None # show_responses
+    print("Total number of entries:", counter)
+  return None
+# Function: show_responses
 
 # Function: dump_responses
-def dump_responses(responses, path = "./dump_responses"):
+def dump_responses(responses, path="./dump_responses"):
   try:
     makedirs(path, 0o755)
   except OSError as e:
@@ -89,22 +94,29 @@ def dump_responses(responses, path = "./dump_responses"):
           response_file.close()
       except IOError:
         print("Error writing to:", file_name)
-  return None # dump_responses
+  return None
+# Function: dump_responses
 
-def strip_tags(text = ""):
+# Function: strip_tags
+def strip_tags(text=None):
   if text:
-    return xhtml_tag.sub('', text) # strip_tags
+    return xt_html.sub("", text)
+  return None
+# Function: strip_tags
 
-def normalize(text = ""):
+# Function: normalize
+def normalize(text=None):
   if text:
-    return xspaces.sub(' ', (xpuncts.sub('', strip_tags(text)))).lower()
+    return xspaces.sub(" ", (xpuncts.sub("", strip_tags(text)))).lower()
+  return None
+# Function: normalize
 
-# Main
+# Main program
 if len(argv) < 2:
   show_help()
   exit()
 elif argv[1] == "show":
-  # show <file>
+  # Command line: <program> show <file>
   try:
     with open(argv[2], "r", 1) as list_file:
       responses = parse_responses(list_file)
@@ -114,7 +126,7 @@ elif argv[1] == "show":
   else:
     list_file.close
     exit()
-  # show [field] <file>
+  # Command line: <program> show [field] <file>
   try:
     with open(argv[3], "r", 1) as list_file:
       responses = parse_responses(list_file)
@@ -126,7 +138,7 @@ elif argv[1] == "show":
     list_file.close
     exit()
 elif argv[1] == "dump":
-  # dump <file>
+  # Command line: <program> dump <file>
   try:
     with open(argv[2], "r", 1) as list_file:
       responses = parse_responses(list_file)
