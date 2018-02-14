@@ -5,20 +5,24 @@
 
 # External routines
 
-import re, errno
+import re, errno, json
 from sys import argv, exit
-from os import makedirs
+from os import makedirs, listdir
 from os.path import basename, join
 from math import log10, floor
+from urllib.request import urlopen, Request, HTTPError
+from urllib.parse import urlencode, quote_plus
 
 # Variables
 
 # Response dictionary key names (not defined by response-lists)
 question_key = "question"
 response_key = "response"
+# Global token variable
+token = None
 # Regex patterns for response-lists processing
 xt_html = re.compile(r"<[^>]+>")
-xpuncts = re.compile(r"[^\w\s]")
+xpuncts = re.compile(r"[^-\w\s]|\s+[^\w]+\s+")
 xspaces = re.compile(r"\s+")
 xextens = re.compile(r"\.res$|\.$|$")
 
@@ -107,9 +111,79 @@ def strip_tags(text=None):
 # Function: normalize
 def normalize(text=None):
   if text:
-    return xspaces.sub(" ", (xpuncts.sub("", strip_tags(text)))).lower()
+    return (xspaces.sub(" ", (xpuncts.sub(" ", strip_tags(text))))
+        ).lower().strip()
   return None
 # Function: normalize
+
+# Function: fetch_token
+def fetch_token(login=None, password=None):
+  with open("authentication", "r") as authfile:
+    payload = json.load(authfile)
+    print("fetch_token.payload:", payload)
+    #params = urlencode(payload, quote_via=quote_plus)
+    params = urlencode(payload).encode()
+    print("fetch_token.params:", params)
+    #url = "https://paraphraser.ru/token?{0}".format(params)
+    url = Request("https://paraphraser.ru/token/", data=params)
+    #print("fetch_token.url:", url)
+    try:
+      response = json.loads(urlopen(url).read().decode("utf-8"))
+      print("fetch_token.response:", response)
+      return response["token"]
+    except HTTPError:
+      return None
+# Function: fetch_token
+
+# Function: submit_query
+def submit_query(payload):
+  #params = urlencode(payload, quote_via=quote_plus)
+  params = urlencode(payload).encode()
+  print("submit_query.params:", params)
+  #url = "http://paraphraser.ru/api?{0}".format(params)
+  url = Request("http://paraphraser.ru/api/", data=params)
+  #print("submit_query.url:", url)
+  try:
+    return json.loads(urlopen(url).read().decode("utf-8"))
+  except Exception as e:
+    return json.loads(e.read().decode("utf-8"))
+# Function: submit_query
+
+# Function: get_keywords
+def get_keywords(text=""):
+  print("get_keywords.text:", text)
+  global token
+  if not token:
+    token = fetch_token()
+  if token is not None:
+    result = submit_query({
+        "c": "keywords",
+        "query": str(text),
+        "top": 3,
+        "pos": "NOUN",
+        "clusters": 1,
+        "vecth": 1.0,
+        "synth": 1.0,
+        "expand": 0,
+        "mwe": 1,
+        "forms": 0,
+        "lang": "ru",
+        "format": "json",
+        "token": token,
+      })
+    # Display Paraphraser response
+    if result["code"] == 0:
+      response = result["response"]
+      for item in response:
+        for value in response[item]["keywords"]:
+          print(value)
+      return response
+    else:
+      print("Error executing query.", result["msg"])
+  else:
+    print("Wrong login or password...")
+  return None
+# Function: get_keywords
 
 # Main program
 if len(argv) < 2:
@@ -149,6 +223,17 @@ elif argv[1] == "dump":
   else:
     list_file.close
     exit()
+elif argv[1] == "get-keywords":
+  # Command line: <program> get-vector
+  for the_file in sorted(listdir("dump_responses")):
+    print("main.file:", the_file)
+    with open(join("dump_responses", the_file)) as document:
+      keywords = get_keywords(document.read())
+      if keywords:
+        print(the_file, keywords)
+      document.close()
+  exit()
+  get_keywords()
 else:
   show_help()
   exit()
