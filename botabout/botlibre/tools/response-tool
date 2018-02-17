@@ -10,7 +10,8 @@ from sys import argv, exit
 from os import makedirs, listdir
 from os.path import basename, join
 from math import log10, floor
-from urllib.request import urlopen, Request, HTTPError
+from urllib.request import urlopen, Request
+from urllib.error import URLError, HTTPError
 from urllib.parse import urlencode, quote_plus
 
 # Variables
@@ -118,35 +119,50 @@ def normalize(text=None):
 
 # Function: fetch_token
 def fetch_token(login=None, password=None):
-  with open("authentication", "r") as authfile:
-    payload = json.load(authfile)
-    print("fetch_token.payload:", payload)
-    #params = urlencode(payload, quote_via=quote_plus)
-    params = urlencode(payload).encode()
-    print("fetch_token.params:", params)
-    #url = "https://paraphraser.ru/token?{0}".format(params)
-    url = Request("https://paraphraser.ru/token/", data=params)
-    #print("fetch_token.url:", url)
-    try:
-      response = json.loads(urlopen(url).read().decode("utf-8"))
-      print("fetch_token.response:", response)
-      return response["token"]
-    except HTTPError:
-      return None
+  """ ParaPhraser server requires login and password to be supplied
+      in order to get an API token.
+      This function also reads login and password from file in the
+      working directory called "authentication". This file must be
+      of json format: {"login": "User", "password": "Password"}
+  """
+  payload = ""
+  if login and password:
+    payload = json.loads({"login": login, "password": password})
+  else:
+    with open("authentication", "r") as authfile:
+      payload = json.load(authfile)
+  print("fetch_token.payload:", payload)
+  payload = urlencode(payload).encode("utf-8")
+  print("fetch_token.payload:", payload)
+  request = Request("https://paraphraser.ru/token/", data=payload)
+  try:
+    response = json.loads(urlopen(request).read().decode("utf-8"))
+    print("fetch_token.response:", response)
+    return response["token"]
+  except (URLError, HTTPError) as e:
+    print(e.reason)
+    if type (e) is HTTPError:
+      print(json.loads(e.read().decode("utf-8")))
+  except Exception as e:
+    print(e)
+  return None
 # Function: fetch_token
 
 # Function: submit_query
 def submit_query(payload):
-  #params = urlencode(payload, quote_via=quote_plus)
-  params = urlencode(payload).encode()
-  print("submit_query.params:", params)
-  #url = "http://paraphraser.ru/api?{0}".format(params)
-  url = Request("http://paraphraser.ru/api/", data=params)
-  #print("submit_query.url:", url)
+  payload = urlencode(payload).encode()
+  print("submit_query.params:", payload)
+  request = Request("http://paraphraser.ru/api/", data=payload,)
+      #headers={"Content-Type": "application/json"}, method="POST")
   try:
-    return json.loads(urlopen(url).read().decode("utf-8"))
+    return json.loads(urlopen(request).read().decode("utf-8"))
+  except (URLError, HTTPError) as e:
+    print(e.reason)
+    if type(e) is HTTPError:
+      return json.loads(e.read().decode("utf-8"))
   except Exception as e:
-    return json.loads(e.read().decode("utf-8"))
+    print(e)
+  return dict()
 # Function: submit_query
 
 # Function: get_keywords
@@ -158,12 +174,12 @@ def get_keywords(text=""):
   if token is not None:
     result = submit_query({
         "c": "keywords",
-        "query": str(text),
+        "query": "по отношению к виртуальным собеседникам также употребляется термин программа-собеседник",
         "top": 3,
         "pos": "NOUN",
-        "clusters": 1,
-        "vecth": 1.0,
-        "synth": 1.0,
+        "clusters": 0,
+        "vecth": 0.68,
+        "synth": 0.1,
         "expand": 0,
         "mwe": 1,
         "forms": 0,
@@ -172,16 +188,16 @@ def get_keywords(text=""):
         "token": token,
       })
     # Display Paraphraser response
-    if result["code"] == 0:
-      response = result["response"]
+    if result.get("code") == 0:
+      response = result.get("response")
       for item in response:
-        for value in response[item]["keywords"]:
+        for value in response[item].get("keywords"):
           print(value)
       return response
     else:
-      print("Error executing query.", result["msg"])
+      print("Error executing query.\nRESPONSE:", result.get("msg"))
   else:
-    print("Wrong login or password...")
+    print("No API token. Perhaps, wrong login or password...")
   return None
 # Function: get_keywords
 
@@ -232,6 +248,7 @@ elif argv[1] == "get-keywords":
       if keywords:
         print(the_file, keywords)
       document.close()
+      exit() # stub 1 request
   exit()
   get_keywords()
 else:
