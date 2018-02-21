@@ -11,7 +11,10 @@ from urllib.request import urlopen, Request
 from urllib.error import URLError, HTTPError
 from urllib.parse import urlencode, quote_plus
 
-from memkalkul import total_size
+try:
+  from memkalkul import total_size
+except:
+  pass
 
 # Response dictionary key names (not defined by response-lists)
 question_key = "question"
@@ -61,7 +64,10 @@ def show_responses(responses=None, field=question_key):
       print(str(counter).zfill(pad), the_response.get(field))
     # Display total
     print("Total number of entries:", counter)
-    print("Memory consumption:", total_size(responses))
+    try:
+      print("Memory consumption:", total_size(responses))
+    except:
+      pass
   return None
 # Function: show_responses
 
